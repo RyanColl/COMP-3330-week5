@@ -4,9 +4,9 @@
   "description": "",
   "main": "Server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node Server.js",
-    "rebuild": "npm i && npm start"
+    "build": "react-scripts build",
+    "start": "react-scripts start",
+    "launch": "npm run build && node Server.js"
   },
   "repository": {
     "type": "git",
@@ -17,8 +17,35 @@
   "bugs": {
     "url": "https://github.com/RyanColl/COMP-3330-week5/issues"
   },
-  "homepage": "https://github.com/RyanColl/COMP-3330-week5#readme",
+  "homepage": "/",
   "dependencies": {
-    "express": "^4.17.1"
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.10",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
+    "redux": "^4.1.1",
+    "web-vitals": "^1.1.2"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

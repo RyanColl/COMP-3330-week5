@@ -8,7 +8,7 @@ const path = require('path')
 const userRouter = express.Router();
 const port = process.env.PORT || 3000;
 const User = require("./models/userModel");
-app.use(express.static("public"));
+app.use(express.static("build"));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
