@@ -1,20 +1,12 @@
 import * as actions from "./actionTypes";
 
 
-export default function reducer(state = [], action) {
+export default async function reducer(state = [], action) {
   switch (action.type) {
     case actions.GET_USERS:
-      return fetch('/api/users')
-        .then(response => console.log(response.json()))
-        .catch(err => console.log(err))
-      // return [
-      //   ...state,
-      //   {
-      //     id: nextId++,
-      //     description: action.payload.description,
-      //     resolved: false,
-      //   },
-      // ];
+      return [
+        ...state,
+      ];
     case actions.ADD_USER:
       return state.filter((bug) => bug.id !== action.payload.id);
     case actions.PATCH_USER:
