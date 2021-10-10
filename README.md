@@ -22,15 +22,15 @@ Post is used for adding new pieces of data to the database. You cannot actually 
 #### GET 
 GET is similar to its word; it gets a requested resource. The server returns the list of users with a get request. The server will also give you the user if you use a GET request on this url: http://localhost:3000/api/users/placetheidhere .
 
-### Command Scripts
+## Command Scripts
 1. "start": "node Server.js"
 2. "rebuild": "npm i && npm start"
 
 The "start" script is what i use to run my server. It simply executes node on "Server.js". The "rebuild" script is perfect for individuals without the node modules folder in their project. Just type "npm run rebuild", and all the dependencies will be downloaded, and the server started.
 
-### Mongoose
+## Mongoose
 
-MongoDB and Mongoose go hand in hand to create models for your database entries. This gives you fast and easy queries while preserving safety in the form of data manipulation. When we create these models we must imagine the shape of our documents and model them out. For example, each user has a first_name, a last_name, a profession, and a hasDegree variable which is boolean, indicating whether the user has a degree or not. We use the following code to model a user
+MongoDB and Mongoose go hand in hand to create models for your database entries. This gives you fast and easy queries while preserving safety in the form of data manipulation. When we create these models we must imagine the shape of our documents and model them out. For example, each user has a first_name, a last_name, a profession, and a hasDegree variable which is boolean, indicating whether the user has a degree or not. We use the following code to model a user:
 
 #### userModel.js
 <pre><code>const mongoose = require("mongoose");
@@ -43,3 +43,8 @@ const userModel = new Schema({
 });
 module.exports = mongoose.model("User", userModel);
 </code></pre>
+
+## How it Works
+It works by first accessing a database that has predefined users, and hosting a server that has numerous methods for accepting requests. I use two routes, one for the /api/books, and one for the /api/books/placetheidhere. The api/books route has two methods, GET, for getting a list of all the users, and POST, for sending data as a new database entry. The api/books/placetheidhere Has four methods: GET, PUT, PATCH, DELETE. The GET gets the information about that specific user, the PUT takes in new user data and replaces that specific users data with it, the PATCH takes in a piecce of information and replaces the specific user data piece that matches that piece of data. The DELETE method seems obvious... it deletes the object whos id it matches.
+
+## ES6
