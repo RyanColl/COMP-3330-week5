@@ -33,7 +33,7 @@ The "start" script is what i use to run my server. It simply executes node on "S
 MongoDB and Mongoose go hand in hand to create models for your database entries. This gives you fast and easy queries while preserving safety in the form of data manipulation. When we create these models we must imagine the shape of our documents and model them out. For example, each user has a first_name, a last_name, a profession, and a hasDegree variable which is boolean, indicating whether the user has a degree or not. We use the following code to model a user
 
 #### userModel.js
-<pre><code><const mongoose = require("mongoose");
+<pre><code>const mongoose = require("mongoose");
 const {Schema} = mongoose;
 const userModel = new Schema({
   first_name: {type: String},
@@ -41,5 +41,5 @@ const userModel = new Schema({
   profession: {type: String},
   hasDegree: {type: Boolean, default: false},
 });
-module.exports = mongoose.model("User", userModel);>
+module.exports = mongoose.model("User", userModel);
 </code></pre>
