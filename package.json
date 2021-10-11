@@ -5,7 +5,6 @@
   "main": "Server.js",
   "scripts": {
     "build": "react-scripts build",
-    "start": "react-scripts start",
     "launch": "npm run build && node Server.js"
   },
   "repository": {

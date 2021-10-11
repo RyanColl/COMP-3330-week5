@@ -1,7 +1,7 @@
 # COMP-3330-week5
 ## Express | Mongoose
 
-Last week we didn't have any homework sessions, but we did cover NodeJS as a backend language, alongside express. This week, we take this knowledge further and build a backend RESTful API. This involves following a set of rules prescribed by each method. The methods are: PUT, PATCH, POST, GET, and DELETE.
+Last week we didn't have any homework sessions, but we did cover NodeJS as a backend language, alongside express. This week, we take this knowledge further and build a backend RESTful API. This involves following a set of rules prescribed by each method. The methods are: PUT, PATCH, POST, GET, and DELETE. I am going to take this a step further and create a react app using redux. I will display the data from the database, and allow us to directly delete from the database each user. We could add edit and add buttons, but we don't need to.
 
 ## HTTP Methods
 
@@ -17,16 +17,16 @@ Patch is similar to PUT in the sense that you are modifying existing data. Patch
 Put is similar to PATCH, but instead of going into an entry and mutating a piece of data, PUT replaces the entire object, keeping the same id.
 
 #### POST
-Post is used for adding new pieces of data to the database. You cannot actually POST on http://localhost:3000/api/users/placetheidhere because it doesnt make sense. You want to create new pieces of data with POST, therefore sending it to the http://localhost:3000/api/users url makes sense. Follow this with a get request to see the new entry.
+Post is used for adding new pieces of data to the database. You cannot actually POST on http://localhost:3000/api/users/placetheidhere because it doesnt make sense. You want to create new pieces of data with POST, therefore sending it to the http://localhost:3000/api/users url makes sense. Follow this with a GET request to see the new entry.
 
 #### GET 
 GET is similar to its word; it gets a requested resource. The server returns the list of users with a get request. The server will also give you the user if you use a GET request on this url: http://localhost:3000/api/users/placetheidhere .
 
 ## Command Scripts
-1. "start": "node Server.js"
-2. "rebuild": "npm i && npm start"
+1. "build": "react-scripts build",
+2. "launch": "npm run build && node Server.js"
 
-The "start" script is what i use to run my server. It simply executes node on "Server.js". The "rebuild" script is perfect for individuals without the node modules folder in their project. Just type "npm run rebuild", and all the dependencies will be downloaded, and the server started.
+The build script is important when blending react and express. The build script builds my react app into the build folder for my express app to host. The launch script builds the app and then launches the server. It is essential that when working like this you rebuild your react app every time you host, or your changes will not show up.
 
 ## Mongoose
 
@@ -45,6 +45,49 @@ module.exports = mongoose.model("User", userModel);
 </code></pre>
 
 ## How it Works
-It works by first accessing a database that has predefined users, and hosting a server that has numerous methods for accepting requests. I use two routes, one for the /api/books, and one for the /api/books/placetheidhere. The api/books route has two methods, GET, for getting a list of all the users, and POST, for sending data as a new database entry. The api/books/placetheidhere Has four methods: GET, PUT, PATCH, DELETE. The GET gets the information about that specific user, the PUT takes in new user data and replaces that specific users data with it, the PATCH takes in a piecce of information and replaces the specific user data piece that matches that piece of data. The DELETE method seems obvious... it deletes the object whos id it matches.
+It works by first accessing a database that has predefined users, and hosting a server that has numerous methods for accepting requests. I use two routes, one for the /api/books, and one for the /api/books/placetheidhere. The api/books route has two methods, GET, for getting a list of all the users, and POST, for sending data as a new database entry. The api/books/placetheidhere Has four methods: GET, PUT, PATCH, DELETE. The GET gets the information about that specific user, the PUT takes in new user data and replaces that specific user with it, the PATCH takes in a piece of information and replaces the specific user data that matches the input data. The DELETE method seems obvious... it deletes the object whos id it matches.
+
+I have created a frontend. As you know the react app will be hosted naturally through the build folder as express runs itself as a server. Express will still respond with json through the browser or as json through postman when requests are sent to its url. The added react app uses fetch to access the api in the express app, this gives me the array of users from mongo, which is then added to redux and attached to the state variable. These users are printed out to the page, with an extended delete functionality. This will permanently delete that user by using fetch to access the delete request for that specific ID. To add more users, use Postman.
 
 ## ES6
+
+Default from line 4 of reducer.js:
+<pre><code>export default function reducer(state = [], action)</code></pre>
+
+Const and Let from lines 25-32 of App.js:
+<pre><code>const deleteUser = (id) => {
+      fetch(`/api/users/${id}`, {
+        method: 'DELETE'
+      })
+      let newUsers = users.filter(user => user._id !== id)
+      store.dispatch(actions.getUsers(newUsers))
+  }</code></pre>
+
+Template Literal String from line 44 of App.js:
+<pre><code>Has a Degree: {`${user.hasDegree}`}</code></pre>
+
+Destructuring from line 7 of App.js:
+<pre><code>const [users, setUsers] = React.useState([])</code></pre>
+
+Arrow function from lines 17-19 of App.js: 
+<pre><code>React.useEffect(() => {
+    fetchUsers()
+  }, [])</code></pre>
+
+Spread syntax from line 8 of reducer.js:
+<pre><code>...action.payload.users</code></pre>
+
+Modules from lines 1-4 of App.js:
+<pre><code>import React from 'react'
+import './App.css';
+import store from "./Redux/customizedStore";
+import * as actions from "./Redux/actions";</code></pre>
+
+Promises from lines 10-15 of App.js:
+<pre><code>fetch('/api/users')
+      .then(res => res.json())
+      .then(data => {
+        store.dispatch(actions.getUsers(data))
+      })
+      .catch(err => setErrMsg(err))</code></pre>
+
