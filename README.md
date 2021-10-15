@@ -1,5 +1,5 @@
 # COMP-3330-week5
-## Express | Mongoose
+## Express | Mongoose | React | Redux
 
 Last week we didn't have any homework sessions, but we did cover NodeJS as a backend language, alongside express. This week, we take this knowledge further and build a backend RESTful API. This involves following a set of rules prescribed by each method. The methods are: PUT, PATCH, POST, GET, and DELETE. I am going to take this a step further and create a react app using redux. I will display the data from the database, and allow us to directly delete from the database each user. We could add edit and add buttons, but we don't need to.
 
