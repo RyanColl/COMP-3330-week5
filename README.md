@@ -33,7 +33,8 @@ The build script is important when blending react and express. The build script 
 MongoDB and Mongoose go hand in hand to create models for your database entries. This gives you fast and easy queries while preserving safety in the form of data manipulation. When we create these models we must imagine the shape of our documents and model them out. For example, each user has a first_name, a last_name, a profession, and a hasDegree variable which is boolean, indicating whether the user has a degree or not. We use the following code to model a user:
 
 #### userModel.js
-<pre><code>const mongoose = require("mongoose");
+```js
+const mongoose = require("mongoose");
 const {Schema} = mongoose;
 const userModel = new Schema({
   first_name: {type: String},
@@ -42,52 +43,118 @@ const userModel = new Schema({
   hasDegree: {type: Boolean, default: false},
 });
 module.exports = mongoose.model("User", userModel);
-</code></pre>
+```
 
 ## How it Works
 It works by first accessing a database that has predefined users, and hosting a server that has numerous methods for accepting requests. I use two routes, one for the /api/books, and one for the /api/books/:bookid. The api/books route has two methods, GET, for getting a list of all the users, and POST, for sending data as a new database entry. The api/books/:bookid has four methods: GET, PUT, PATCH, DELETE. The GET gets the information about that specific user, the PUT takes in new user data and replaces that specific user with it, the PATCH takes in a piece of information and replaces the specific user data that matches the input data. The DELETE method seems obvious... it deletes the object whos id it matches.
 
 I have created a frontend. As you know the react app will be hosted naturally through the build folder as express runs itself as a server. Express will still respond with json through the browser or as json through postman when requests are sent to its url. The added react app uses fetch to access the api in the express app, this gives me the array of users from mongo, which is then added to redux and attached to the state variable. These users are printed out to the page, with an extended delete functionality. This will permanently delete that user by using fetch to access the delete request for that specific ID. To add more users, use Postman.
 
-## ES6
+## Redux
 
-Default from line 4 of reducer.js:
-<pre><code>export default function reducer(state = [], action)</code></pre>
-
-Const and Let from lines 25-32 of App.js:
-<pre><code>const deleteUser = (id) => {
+React Redux gives us more capability with state because we can make our state into a store that is accessible throughout all of the app. I used redux with react on the frontend to send a fetch request to my server, and store the value via: 
+```js
+const fetchUsers = () => {
+    fetch('/api/users')
+      .then(res => res.json())
+      .then(data => {
+        store.dispatch(actions.getUsers(data))
+      })
+      .catch(err => setErrMsg(err))
+  }
+```
+This takes in our data inside of the promise and sends it to store. The state becomes an array of users. The dispatch event calls the subscribe method, which is used to update the state in the react app. 
+```js
+React.useEffect(() => {
+    store.subscribe(() => {
+      setUsers(store.getState())
+    })
+  })
+```
+This updates the state of the react app by updating the users variable with the user array from store. This way, if we change the store anywhere, the subscribe method will run, and change our state everywhere. The goal of our app is to display the users using a get request. Now that we have our data, we want to render it. Use effect gives us the ability to run asyncronous tasks. We use the use effects to place the data into the array. The app will still load before that, so we use the <b>&&</b> operator to check a condition before loading. 
+```jsx
+{users !== [] && users.map(user => {
+            {console.log(user.hasDegree)}
+            return (<div style={{width: 300, height: 180, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-evenly', padding: 15}}>
+              <p style={{color: 'white', margin: 0, padding: 0}}>{user._id}</p>
+              <p style={{color: 'white', margin: 0, padding: 0}}>{user.first_name}</p>
+              <p style={{color: 'white', margin: 0, padding: 0}}>{user.last_name}</p>
+              <p style={{color: 'white', margin: 0, padding: 0}}>{user.profession}</p>
+              <p style={{color: 'white', margin: 0, padding: 0}}>Has a Degree: {`${user.hasDegree}`}</p>
+              <div style={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}} className='links'>
+                  <button onClick={() => {deleteUser(user._id)}} style={{backgroundColor: 'rgba(0, 0, 0, 0)', color: 'white'}}>delete</button>
+              </div>
+            </div>)
+          })}
+```
+If we do not check the condition, then our react app will try to build the structure above when the array is empty. This will crash our app. Using ternaries to check conditions before rendering is good practice.
+For every user made, a delete button is made as well that takes in the id of the user and removes it from our state via deleteUser:
+```js
+const deleteUser = (id) => {
       fetch(`/api/users/${id}`, {
         method: 'DELETE'
       })
       let newUsers = users.filter(user => user._id !== id)
       store.dispatch(actions.getUsers(newUsers))
-  }</code></pre>
+}
+```
+Because its mongodb, the user id is _id. This is a good example of a nodejs RESTApi that also hosts a react app that communicates with it.
+
+## ES6
+
+Default from line 4 of reducer.js:
+```js
+export default function reducer(state = [], action)
+```
+
+Const and Let from lines 25-32 of App.js:
+```js
+const deleteUser = (id) => {
+      fetch(`/api/users/${id}`, {
+        method: 'DELETE'
+      })
+      let newUsers = users.filter(user => user._id !== id)
+      store.dispatch(actions.getUsers(newUsers))
+  }
+```
 
 Template Literal String from line 44 of App.js:
-<pre><code>Has a Degree: {`${user.hasDegree}`}</code></pre>
+```js
+`Has a Degree: {`${user.hasDegree}`}`
+```
 
 Destructuring from line 7 of App.js:
-<pre><code>const [users, setUsers] = React.useState([])</code></pre>
+```js
+const [users, setUsers] = React.useState([])<
+```
 
 Arrow function from lines 17-19 of App.js: 
-<pre><code>React.useEffect(() => {
+```js
+React.useEffect(() => {
     fetchUsers()
-  }, [])</code></pre>
+  }, [])
+```
 
 Spread syntax from line 8 of reducer.js:
-<pre><code>...action.payload.users</code></pre>
+```js
+...action.payload.users
+```
 
 Modules from lines 1-4 of App.js:
-<pre><code>import React from 'react'
+```js
+import React from 'react'
 import './App.css';
 import store from "./Redux/customizedStore";
-import * as actions from "./Redux/actions";</code></pre>
+import * as actions from "./Redux/actions";
+```
 
 Promises from lines 10-15 of App.js:
-<pre><code>fetch('/api/users')
+```js
+fetch('/api/users')
       .then(res => res.json())
       .then(data => {
         store.dispatch(actions.getUsers(data))
       })
-      .catch(err => setErrMsg(err))</code></pre>
+      .catch(err => setErrMsg(err))
+```
 
